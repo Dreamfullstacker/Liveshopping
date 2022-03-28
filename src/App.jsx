@@ -379,7 +379,7 @@ function App() {
             <VideoPlayer setMetadataId={setCurrentProductId} videoStream={config.PLAYBACK_URL} />
           </div>
           <div className='production_chat'  style={{zIndex : '1'}}>
-            <div className='m_production_list d-flex align-items-start flex-column'>
+            <div className='d-flex align-items-start flex-column'>
               <Button variant="danger" className='mt-3 ms-3'>Live</Button>
               <div className='mt-3 ms-3'>
                 <a href='https://www.styley.co/cactus-en-pot/204-2365-me-fais-pas-crever-cactus.html#/66-base-fasciata'>
