@@ -153,6 +153,7 @@ function App() {
   }, []);
   var bubble_count = 0;
   const showsticker = () => {
+    console.log('imagesrc')
     var myVar = setInterval(function () {
       console.log(++bubble_count);
       if (bubble_count === 5) {
@@ -438,7 +439,7 @@ function App() {
                         <BsThreeDots style={{width : '30px', height : '30px'}}/>
                         <BsClock style={{width : '30px', height : '30px'}}/>
                         <HiOutlineShoppingBag style={{width : '30px', height : '30px'}}/>
-                        <AiOutlineHeart style={{width : '30px', height : '30px'}}/>
+                        <AiOutlineHeart style={{width : '30px', height : '30px'}}  onClick={showsticker}/>
                         
                       </div>
                     </div>
