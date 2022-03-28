@@ -378,7 +378,7 @@ function App() {
           <div className='m_videoplayer' style={{zIndex : '-1'}}>
             <VideoPlayer setMetadataId={setCurrentProductId} videoStream={config.PLAYBACK_URL} />
           </div>
-          <div className='production_chat'  style={{zIndex : '1'}}>
+          <div className='production_chat d-flex flex-column'  style={{zIndex : '1'}}>
             <div className='d-flex align-items-start flex-column'>
               <Button variant="danger" className='mt-3 ms-3'>Live</Button>
               <div className='mt-3 ms-3'>
@@ -389,56 +389,58 @@ function App() {
                 </a>
               </div>
             </div>
-            <div className='m_chat_area  d-flex flex-column '>
-              <div className='m_chat_messages ms-3 row' style = {{margin : '0px'}}>
-                <div id='msg_box' className='col-8' style={{overflowY : 'scroll', overflowX : 'hidden', height : '35vh'}}>
-                  {messages.length>0 && messages.map(msg => {
-                    let formattedMessage = parseUrls(msg.message_content);
-                    return (
-                      <div className="chat-line" key={msg.timestamp} style = {{width : 'fit-content'}}>
-                        <p className='message text-start'><span className="username fw-bold">{msg.message_username} : </span><span dangerouslySetInnerHTML={{__html: formattedMessage}} /></p>
-                      </div>
-                    )
-                  })}
-                </div>
-                <div className='col-4' id = 'heart-bubble' style={{paddingBottom : '0px'}}>
-
-                </div>
-              </div>
-              <div className='mt-auto' style={{borderTop : 'solid', padding : '10px'}}>
-                <div className='row' style={{margin: '0px'}}>
-                  <div className='col-6 m_col'>
-                    <Button variant="success" onClick={handleShow} style={{display: namestate ? 'none' : 'inline'}}>Start Chat</Button>
-                    <Modal show={modalshow} onHide={handleClose}>
-                      <Modal.Header closeButton>
-                        <Modal.Title>Welcome to Live Shopping</Modal.Title>
-                      </Modal.Header>
-                      <Modal.Body>
-                        Please input your name please...
-                        <div className='p-5'>
-                          <input type={'text'} placeholder = 'User Name' ref={inputRef} value={username} onChange={(e) => setUsername(e.target.value)}></input>
+            <div className=' mt-auto'>
+              <div className='d-flex flex-column'>
+                <div className='m_chat_messages ms-3 row' style = {{margin : '0px'}}>
+                  <div id='msg_box' className='col-8' style={{overflowY : 'scroll', overflowX : 'hidden', height : '35vh'}}>
+                    {messages.length>0 && messages.map(msg => {
+                      let formattedMessage = parseUrls(msg.message_content);
+                      return (
+                        <div className="chat-line" key={msg.timestamp} style = {{width : 'fit-content'}}>
+                          <p className='message text-start'><span className="username fw-bold">{msg.message_username} : </span><span dangerouslySetInnerHTML={{__html: formattedMessage}} /></p>
                         </div>
-                      </Modal.Body>
-                      <Modal.Footer>
-                        <Button variant="primary" onClick={handleSaveName}>
-                          Save Name
-                        </Button>
-                      </Modal.Footer>
-                    </Modal>
-                    <div className='text-white' style={{display: namestate ? 'block' : 'none'}}>
-                      <input className='m_chat_input text-white' id='chatinput' placeholder='Chat with seller' value={message}
-                          maxLength={510}
-                          onChange={handleChange}
-                          onKeyDown={handleKeyDown}></input>
-                    </div>
+                      )
+                    })}
                   </div>
-                  <div className='col-6 m_col'>
-                    <div className='align-middle d-flex justify-content-between text-white'>
-                      <BsThreeDots style={{width : '30px', height : '30px'}}/>
-                      <BsClock style={{width : '30px', height : '30px'}}/>
-                      <HiOutlineShoppingBag style={{width : '30px', height : '30px'}}/>
-                      <AiOutlineHeart style={{width : '30px', height : '30px'}}/>
-                      
+                  <div className='col-4' id = 'heart-bubble' style={{paddingBottom : '0px'}}>
+
+                  </div>
+                </div>
+                <div className='mt-auto' style={{borderTop : 'solid', padding : '10px'}}>
+                  <div className='row' style={{margin: '0px'}}>
+                    <div className='col-6 m_col'>
+                      <Button variant="success" onClick={handleShow} style={{display: namestate ? 'none' : 'inline'}}>Start Chat</Button>
+                      <Modal show={modalshow} onHide={handleClose}>
+                        <Modal.Header closeButton>
+                          <Modal.Title>Welcome to Live Shopping</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          Please input your name please...
+                          <div className='p-5'>
+                            <input type={'text'} placeholder = 'User Name' ref={inputRef} value={username} onChange={(e) => setUsername(e.target.value)}></input>
+                          </div>
+                        </Modal.Body>
+                        <Modal.Footer>
+                          <Button variant="primary" onClick={handleSaveName}>
+                            Save Name
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
+                      <div className='text-white' style={{display: namestate ? 'block' : 'none'}}>
+                        <input className='m_chat_input text-white' id='chatinput' placeholder='Chat with seller' value={message}
+                            maxLength={510}
+                            onChange={handleChange}
+                            onKeyDown={handleKeyDown}></input>
+                      </div>
+                    </div>
+                    <div className='col-6 m_col'>
+                      <div className='align-middle d-flex justify-content-between text-white'>
+                        <BsThreeDots style={{width : '30px', height : '30px'}}/>
+                        <BsClock style={{width : '30px', height : '30px'}}/>
+                        <HiOutlineShoppingBag style={{width : '30px', height : '30px'}}/>
+                        <AiOutlineHeart style={{width : '30px', height : '30px'}}/>
+                        
+                      </div>
                     </div>
                   </div>
                 </div>
