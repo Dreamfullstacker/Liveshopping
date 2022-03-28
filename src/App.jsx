@@ -387,21 +387,6 @@ function App() {
                     <img src={require('./assets/production/production1.jpg')} style = {{width: '50px' , height : 'auto'}}></img>
                   </div>
                 </a>
-                <a href='https://www.styley.co/idees-cadeaux/206-2362-pas-la-peine-de-m-arroser-morue-cactus.html#/66-base-fasciata'>
-                  <div className='m_production_item my-2'>
-                    <img src={require('./assets/production/production2.jpg')} style = {{width: '50px' , height : 'auto'}}></img>
-                  </div>
-                </a>
-                <a href='https://www.styley.co/cactus-en-pot/337-3662-all-you-need-is-love-cactus.html#/65-base-limifolia'>
-                  <div className='m_production_item my-2'>
-                    <img src={require('./assets/production/production3.jpg')} style = {{width: '50px' , height : 'auto'}}></img>
-                  </div>
-                </a>
-                <a href='https://www.styley.co/cactus-en-pot/231-2444-barrez-vous-de-chez-moi-cactus.html#/66-base-fasciata'>
-                  <div className='m_production_item my-2'>
-                    <img src={require('./assets/production/production4.jpg')} style = {{width: '50px' , height : 'auto'}}></img>
-                  </div>
-                </a>
               </div>
             </div>
             <div className='m_chat_area  d-flex flex-column '>
