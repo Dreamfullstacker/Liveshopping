@@ -3,13 +3,13 @@
 
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import * as config from '../../config';
+import * as config from '../config';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button'
 
-// Components
-import Modal from '../modal/Modal';
 
 // Mock data
-import { mockProductList } from '../../__test__/mocks/products-mocks';
+import { mockProductList } from '../__test__/mocks/products-mocks';
 
 // Styles
 import './ProductList.css';
@@ -17,7 +17,8 @@ import './ProductList.css';
 const ProductList = (props) => {
   const [productId, setProductId] = useState('');
   const [productsArr, setProducts] = useState([]);
-
+  const [productmodalshow, setProductModalShow] = useState(false);
+  const [modalshowproduct, setModalShowProduct] = useState('');
   useEffect(() => {
     if (config.USE_MOCK_DATA) {
       const { products } = mockProductList.data;
@@ -67,14 +68,21 @@ const ProductList = (props) => {
     scrollToCurrentProduct();
   })
 
-  const handleProductClick = (productId) => {
-    setProductId(productId)
-    props.setModal(true);
+  const handleProductClick = (id) => {
+    const details = productsArr.filter(product => product.id === id);
+    setModalShowProduct(details[0]);
+    console.log(modalshowproduct)
+    setProductModalShow(true)
   }
+
+  const handleClose = () => {
+    setProductModalShow(false)
+  };
 
   const renderProductList = () => {
     const { currentProductId } = props;
     return (
+      
       productsArr.map(product => {
         const { id, name, price, discountedPrice } = product;
         let { imageUrl } = product;
@@ -82,41 +90,27 @@ const ProductList = (props) => {
         // if using mock data, refernce the images in the public folder
         if (config.USE_MOCK_DATA) {
           imageUrl = `${process.env.PUBLIC_URL}/${imageUrl}`;
-          // console.log(imageUrl);
         }
 
         const current = (currentProductId && currentProductId === id) ? 'product-current' : '';
         const onSale = (price !== discountedPrice) ? 'product-onsale' : '';
 
         return (
-          <><div className={`product fl-shrink-0 pd-05 fl fl-nowrap br-all-sm ${current}`} key={id} onClick={() => handleProductClick(id)}>
-            <div className="product-img no-overflow br-all-sm fl-shrink-0">
-              <img src={imageUrl} alt={id} />
-            </div>
-            <div className="product-name pd-r-1 mg-l-1 fl fl-column fl-wrap fl-j-between fl-shrink-1">
-              <div className="line-clamp-2">{name}</div>
-              <div className={`product-price-wrapper ${onSale}`}>
-                <span className="product-price">{`$${price}`}</span>
-                {onSale && (
-                  <span className="product-discounted-price">{`$${discountedPrice}`}</span>
-                )}
-              </div>
-            </div>
-          </div><a href='https://www.styley.co/cactus-en-pot/204-2365-me-fais-pas-crever-cactus.html#/66-base-fasciata' style={{ textDecoration: 'none', color: 'black' }}>
-              <div className='productionListItem mouse_pointer'>
-                <div className='row'>
-                  <div className='col-4 col-sm-3 col-md-12 col-lg-3'>
-                    <img src={require('./assets/production/production1.jpg')} style={{ width: '100%', height: 'auto' }}></img>
-                  </div>
-                  <div className='col-8 col-sm-9 col-md-12 col-lg-9 text-start production-info'>
-                    <p className='title fw-bold'>Indrani Fashionable Cotton Long Kurti</p>
-                    <p className='subtitle'>Care Instruction: Gentle Machiune</p>
-                    <p className='readmore danger'>Read more</p>
-                    <p className='price fw-bold'>24,90€ <del>30.00€</del></p>
-                  </div>
+          <>
+            <div className={`productionListItem mouse_pointer ${current}` } key = {id} onClick={() => {handleProductClick(id)}}>
+              <div className='row'>
+                <div className='col-4 col-sm-3 col-md-12 col-lg-3'>
+                  <img src={imageUrl} alt={id} style={{ width: '100%', height: 'auto' }}></img>
+                </div>
+                <div className='col-8 col-sm-9 col-md-12 col-lg-9 text-start production-info'>
+                  <p className='title fw-bold'>{name}</p>
+                  <p className='subtitle'>Care Instruction: Gentle Machiune</p>
+                  <p className='readmore danger'>Read more</p>
+                  <p className='price fw-bold'>{`$${price}`} <del>{`$${discountedPrice}`}</del></p>
                 </div>
               </div>
-            </a></>
+            </div>
+          </>
         )
       })
     )
@@ -129,19 +123,28 @@ const ProductList = (props) => {
     }
   }
 
-  const closeModal = () => {
-    props.setModal(false);
-  }
-
-  const { showModal } = props;
   return (
     <div className="products-container bg-alt br-all pd-1">
       <div className="product-list fl fl-nowrap bg-alt br-all">
         {renderProductList()}
       </div>
-      {showModal && (
-        <Modal productId={productId} closeModal={closeModal} products={productsArr} />
-      )}
+      <Modal show={productmodalshow} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Welcome to Live Shopping</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <img src={`${process.env.PUBLIC_URL}/${modalshowproduct.imageUrl}`} alt={modalshowproduct.id} style={{ width: '100%', height: 'auto' }}></img>
+          <h4>{modalshowproduct.name}</h4>
+          <p>{modalshowproduct.longDescription}</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" style={{width : "100%"}}>
+          <a href='https://www.styley.co/cactus-en-pot/204-2365-me-fais-pas-crever-cactus.html#/66-base-fasciata' style={{ textDecoration: 'none', color: 'white' }}>
+            {modalshowproduct.price} * Buy Now
+          </a>
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

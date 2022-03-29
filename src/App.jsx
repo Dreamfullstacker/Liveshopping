@@ -21,7 +21,7 @@ import { render } from '@testing-library/react';
 import BubbleHearts from 'bubble-hearts'
 
 import VideoPlayer from './videoPlayer/VideoPlayer';
-
+import ProductList from './productList/ProductList'
 const stage = new BubbleHearts();
 
 function App() {
@@ -32,10 +32,17 @@ function App() {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [connection, setConnection] = useState(null);
-  const [heart_bubble_speed, setBubbleSpeed] = useState(300);
   const inputRef = createRef();
   const [currentProductId, setCurrentProductId] = useState('')
   const [tabkey, setTabKey] = useState('production');
+
+  const canvas = stage.canvas;
+  canvas.width = 100;
+  canvas.height = 250;
+  let image = new Image;
+  image.src = heart;
+  image.onload = () => {
+  };
 
   useEffect(() => {
 
@@ -69,6 +76,11 @@ function App() {
           message_username = message_data[0].slice(1,-1);
           message_content = message_data[1].slice(1,-2);
         }
+        if(messagetype == "bubbleMessage"){
+          console.log('first')
+          showbubble()
+        }
+        if(message_username && message_content){
         const newMessage = {
           timestamp: Date.now(),
           message_username,
@@ -80,6 +92,7 @@ function App() {
             newMessage
           ];
         });
+      }
         /////////////////////////completed/////////////////////////////////////
         let msgBox=document.getElementById('msg_box');
         msgBox.scrollTop=msgBox.scrollHeight-msgBox.clientHeight;
@@ -101,10 +114,8 @@ function App() {
           "action": "sendmessage",
           "message": "${message.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"
         }`;
-        // console.log(data)
         connection.send(data);
         setMessage('');
-        // console.log(messages)
       }
     }
   }
@@ -139,21 +150,16 @@ function App() {
     setModalShow(false)
     setNameState(true)
   }
-  const canvas = stage.canvas;
-  canvas.width = 100;
-  canvas.height = 250;
-  let image = new Image;
-  image.src = heart;
-  image.onload = () => {
-    // stage.bubble(image);
-  };
-  
-  useEffect(() => {
-    document.getElementById('heart-bubble').appendChild(canvas);
-  }, []);
-  var bubble_count = 0;
   const showsticker = () => {
-    console.log('imagesrc')
+      const data = `{
+        "action": "startbubble",
+        "data" : "bubble",
+      }`;
+      connection.send(data);
+      
+  }
+
+  const showbubble = () => {
     var myVar = setInterval(function () {
       console.log(++bubble_count);
       if (bubble_count === 5) {
@@ -161,11 +167,15 @@ function App() {
         bubble_count = 0;
       }
       stage.bubble(image);
-      // console.log(image.src)
+      console.log(image.src)
     }, 300);
     //  setTimeout(clearInterval(myVar), 3000)
   }
   
+  useEffect(() => {
+    document.getElementById('heart-bubble').appendChild(canvas);
+  }, []);
+  var bubble_count = 0;
 
   return (
     <div className="App">
@@ -173,114 +183,9 @@ function App() {
         <div className='row' style={{margin:'0px',height : '100%'}}>
           <div className='col-lg-4 col-md-3  d-flex flex-column  production_area'  style={{height : '100%'}}>
             <Tabs defaultActiveKey="production" id="uncontrolled-tab-example" className="pt-3" onSelect={(k) => setTabKey(k)}>
-              <Tab eventKey="production" title={<span style={{color : '#ff5050'}}><BiBox style={{width : '30px', height : '30px'}}/><span style={{display : tabkey == "production" ? "inline" : "none"}}>Production</span></span>}>
-                <div className='productionList' style={{overflowY : 'scroll', overflowX : 'hidden', height : '85vh'}}> 
-                  <a href='https://www.styley.co/cactus-en-pot/204-2365-me-fais-pas-crever-cactus.html#/66-base-fasciata' style={{textDecoration : 'none', color : 'black'}}>
-                    <div className='productionListItem mouse_pointer'>
-                      <div className='row'>
-                        <div className='col-4 col-sm-3 col-md-12 col-lg-3'>
-                          <img src={require('./assets/production/production1.jpg')} style = {{width: '100%' , height : 'auto'}}></img>
-                        </div>
-                        <div className='col-8 col-sm-9 col-md-12 col-lg-9 text-start production-info'>
-                          <p className='title fw-bold'>Indrani Fashionable Cotton Long Kurti</p>
-                          <p className='subtitle'>Care Instruction: Gentle Machiune</p>
-                          <p className='readmore danger'>Read more</p>
-                          <p className='price fw-bold'>24,90€ <del>30.00€</del></p>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                  <a href='https://www.styley.co/idees-cadeaux/206-2362-pas-la-peine-de-m-arroser-morue-cactus.html#/66-base-fasciata' style={{textDecoration : 'none', color : 'black'}}>
-                    <div className='productionListItem mouse_pointer'>
-                      <div className='row'>
-                        <div className='col-4 col-sm-3 col-md-12 col-lg-3'>
-                          <img src={require('./assets/production/production2.jpg')} style = {{width: '100%' , height : 'auto'}}></img>
-                        </div>
-                        <div className='col-8 col-sm-9 col-md-12 col-lg-9 text-start production-info'>
-                          <p className='title fw-bold'>Indrani Fashionable Cotton Long Kurti</p>
-                          <p className='subtitle'>Care Instruction: Gentle Machiune</p>
-                          <p className='readmore danger'>Read more</p>
-                          <p className='price fw-bold'>24,90€ <del>30.00€</del></p>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                  <a href='https://www.styley.co/cactus-en-pot/337-3662-all-you-need-is-love-cactus.html#/65-base-limifolia' style={{textDecoration : 'none', color : 'black'}}>
-                    <div className='productionListItem mouse_pointer'>
-                      <div className='row'>
-                        <div className='col-4 col-sm-3 col-md-12 col-lg-3'>
-                          <img src={require('./assets/production/production3.jpg')} style = {{width: '100%' , height : 'auto'}}></img>
-                        </div>
-                        <div className='col-8 col-sm-9 col-md-12 col-lg-9 text-start production-info'>
-                          <p className='title fw-bold'>Indrani Fashionable Cotton Long Kurti</p>
-                          <p className='subtitle'>Care Instruction: Gentle Machiune</p>
-                          <p className='readmore danger'>Read more</p>
-                          <p className='price fw-bold'>24,90€ <del>30.00€</del></p>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                  <a href='https://www.styley.co/cactus-en-pot/231-2444-barrez-vous-de-chez-moi-cactus.html#/66-base-fasciata' style={{textDecoration : 'none', color : 'black'}}>
-                    <div className='productionListItem mouse_pointer'>
-                      <div className='row'>
-                        <div className='col-4 col-sm-3 col-md-12 col-lg-3'>
-                          <img src={require('./assets/production/production4.jpg')} style = {{width: '100%' , height : 'auto'}}></img>
-                        </div>
-                        <div className='col-8 col-sm-9 col-md-12 col-lg-9 text-start production-info'>
-                          <p className='title fw-bold'>Indrani Fashionable Cotton Long Kurti</p>
-                          <p className='subtitle'>Care Instruction: Gentle Machiune</p>
-                          <p className='readmore danger'>Read more</p>
-                          <p className='price fw-bold'>24,90€ <del>30.00€</del></p>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                  <a href='https://www.styley.co/cactus-en-pot/231-2444-barrez-vous-de-chez-moi-cactus.html#/66-base-fasciata' style={{textDecoration : 'none', color : 'black'}}>
-                    <div className='productionListItem mouse_pointer'>
-                      <div className='row'>
-                        <div className='col-4 col-sm-3 col-md-12 col-lg-3'>
-                          <img src={require('./assets/production/production4.jpg')} style = {{width: '100%' , height : 'auto'}}></img>
-                        </div>
-                        <div className='col-8 col-sm-9 col-md-12 col-lg-9 text-start production-info'>
-                          <p className='title fw-bold'>Indrani Fashionable Cotton Long Kurti</p>
-                          <p className='subtitle'>Care Instruction: Gentle Machiune</p>
-                          <p className='readmore danger'>Read more</p>
-                          <p className='price fw-bold'>24,90€ <del>30.00€</del></p>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                  <a href='https://www.styley.co/cactus-en-pot/231-2444-barrez-vous-de-chez-moi-cactus.html#/66-base-fasciata' style={{textDecoration : 'none', color : 'black'}}>
-                    <div className='productionListItem mouse_pointer'>
-                      <div className='row'>
-                        <div className='col-4 col-sm-3 col-md-12 col-lg-3'>
-                          <img src={require('./assets/production/production4.jpg')} style = {{width: '100%' , height : 'auto'}}></img>
-                        </div>
-                        <div className='col-8 col-sm-9 col-md-12 col-lg-9 text-start production-info'>
-                          <p className='title fw-bold'>Indrani Fashionable Cotton Long Kurti</p>
-                          <p className='subtitle'>Care Instruction: Gentle Machiune</p>
-                          <p className='readmore danger'>Read more</p>
-                          <p className='price fw-bold'>24,90€ <del>30.00€</del></p>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                  <a href='https://www.styley.co/cactus-en-pot/231-2444-barrez-vous-de-chez-moi-cactus.html#/66-base-fasciata' style={{textDecoration : 'none', color : 'black'}}>
-                    <div className='productionListItem mouse_pointer'>
-                      <div className='row'>
-                        <div className='col-4 col-sm-3 col-md-12 col-lg-3'>
-                          <img src={require('./assets/production/production4.jpg')} style = {{width: '100%' , height : 'auto'}}></img>
-                        </div>
-                        <div className='col-8 col-sm-9 col-md-12 col-lg-9 text-start production-info'>
-                          <p className='title fw-bold'>Indrani Fashionable Cotton Long Kurti</p>
-                          <p className='subtitle'>Care Instruction: Gentle Machiune</p>
-                          <p className='readmore danger'>Read more</p>
-                          <p className='price fw-bold'>24,90€ <del>30.00€</del></p>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                </div>
+              <Tab eventKey="production" title={<span style={{color : '#ff5050'}}>
+                <BiBox style={{width : '30px', height : '30px'}}/><span style={{display : tabkey == "production" ? "inline" : "none"}}>Production</span></span>}>
+                <ProductList style = {{width : "100%"}}/>
               </Tab>
               {/* <Tab eventKey="shoppingcart" title={<span style={{color : '#ff5050',}}>
                 <AiOutlineShoppingCart style={{width : '30px', height : '30px'}}/><span style={{display : tabkey == "shoppingcart" ? "inline" : "none"}}>shoppingcart</span></span>}>
@@ -293,6 +198,7 @@ function App() {
             {/* <div className='Production_footer mt-auto'>
               <Button variant="danger" style={{marginBottom : '5%'}}>View Cart</Button>
             </div> */}
+            
           </div>
           <div className='col-lg-4 col-md-6 video_area' style={{height : "100%"}}>
             <div className='player_tool d-flex flex-column'  style={{zIndex : '1'}}>
@@ -385,7 +291,7 @@ function App() {
               <div className='mt-3 ms-3'>
                 <a href='https://www.styley.co/cactus-en-pot/204-2365-me-fais-pas-crever-cactus.html#/66-base-fasciata'>
                   <div className='m_production_item my-2'>
-                    <img src={require('./assets/production/production1.jpg')} style = {{width: '50px' , height : 'auto'}}></img>
+                    <img src={require('./assets/production/production1.jpg')} style = {{width: '50px' , height : 'auto'}} alt = 'production'></img>
                   </div>
                 </a>
               </div>

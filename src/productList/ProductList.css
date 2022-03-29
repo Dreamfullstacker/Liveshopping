@@ -18,7 +18,7 @@
 .products-container {
   box-shadow: 0px 6px 24px rgba(0, 0, 0, 0.05);
   overflow-x: var(--product-list-overflow-x);
-  height: var(--product-container-height);
+  height: 90vh;
 }
 
 .product-list {
